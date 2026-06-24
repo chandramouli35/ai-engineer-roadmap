@@ -9,33 +9,34 @@
   --border: #e0e6df; /* Light celadon */
   /* Code blocks - Subtle parchment */
   --code-bg: #f5f2e8; /* Pale tan/bone */
-  
+
   /* ACCENT: Warm earth/copper tone */
   --accent: #b86b4f; /* Terracotta/copper */
-  --accent-bg: rgba(184, 107, 79, 0.1); /* Transparent terracotta */
-  --accent-border: rgba(184, 107, 79, 0.5); /* Semi-transparent terracotta */
+  --accent-bg: rgba(184, 107, 79, 0.1);
+  --accent-border: rgba(184, 107, 79, 0.5);
 
   /* Other earth elements */
-  --social-bg: rgba(245, 242, 232, 0.5); /* Semi-transparent parchment */
+  --social-bg: rgba(245, 242, 232, 0.5);
   --button-bg: #4a6c4a; /* Medium moss green */
   --button-text: #fff;
   --button-hover: #5d7e5d;
-  --logo-icon-bg: #a3b899; /* Pale moss green */
+  --logo-icon-bg: #a3b899;
   --pdf-icon-color: #5d7e5d;
   --chat-bg-canvas: #faf9f6;
-  --panel-bg: #f5f2e8; /* Parchment for panel backdrops */
-  --border-sep: #d8dfd0; /* Muted celadon for separators */
+  --panel-bg: #f5f2e8;
+  --border-sep: #d8dfd0;
 
   --shadow:
-    rgba(74, 108, 74, 0.1) 0 10px 15px -3px, rgba(74, 108, 74, 0.05) 0 4px 6px -2px; /* Earth-toned shadows */
+    rgba(74, 108, 74, 0.1) 0 10px 15px -3px,
+    rgba(74, 108, 74, 0.05) 0 4px 6px -2px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --heading: system-ui, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
-  color-scheme: light; /* Earth tones work best in light scheme */
+  color-scheme: light;
   color: var(--text);
   background: var(--bg);
   font-synthesis: none;
@@ -52,10 +53,10 @@
   width: 100vw;
   height: 100svh;
   margin: 0;
-  text-align: left; /* Changed from center to left for professional layout */
+  text-align: left;
   border: none;
   display: flex;
-  flex-direction: row; /* Multi-panel layout */
+  flex-direction: row;
   box-sizing: border-box;
   background: var(--bg);
   overflow: hidden;
@@ -66,14 +67,13 @@ body {
   overflow: hidden;
 }
 
-/* App.tsx Layout CSS (assuming structure from prior turns) */
-.flex-row-root { /* Add class to root div */
+.flex-row-root {
   display: flex;
   width: 100%;
   height: 100%;
 }
 
-.left-panel { /* Add class to left panel div */
+.left-panel {
   width: 320px;
   background: var(--panel-bg);
   border-right: 1px solid var(--border);
@@ -84,7 +84,7 @@ body {
   box-sizing: border-box;
 }
 
-.right-panel { /* Add class to right canvas div */
+.right-panel {
   flex: 1;
   background: var(--chat-bg-canvas);
   display: flex;
@@ -92,9 +92,9 @@ body {
   overflow: hidden;
 }
 
-/* Updated Typography & Styles */
 h1,
-h2, h3 {
+h2,
+h3 {
   font-family: var(--heading);
   font-weight: 500;
   color: var(--text-h);
@@ -102,7 +102,7 @@ h2, h3 {
 }
 
 h1 {
-  font-size: 32px; /* Professional SaaS size */
+  font-size: 32px;
   letter-spacing: -0.8px;
   margin-bottom: 24px;
 }
@@ -123,8 +123,7 @@ p {
   color: var(--text);
 }
 
-/* Element Styles with Earth Tones */
-.app-icon { /* Class for 'Ω' container */
+.app-icon {
   height: 36px;
   width: 36px;
   background: var(--logo-icon-bg);
@@ -137,20 +136,20 @@ p {
   font-size: 18px;
 }
 
-.app-version { /* Class for version/suite text */
+.app-version {
   font-size: 12px;
-  color: #7d8f7d; /* Medium green */
+  color: #7d8f7d;
 }
 
-.upload-label { /* Class for source document/max size labels */
+.upload-label {
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
   color: #7d8f7d;
 }
 
-.upload-card { /* Class for dashed upload box */
-  border: 2px dashed #d8dfd0; /* Muted sage */
+.upload-card {
+  border: 2px dashed #d8dfd0;
   background: #fbfbf7;
   border-radius: 12px;
   padding: 20px;
@@ -163,27 +162,26 @@ p {
   color: var(--text-h);
 }
 
-.pdf-indicator { /* Class for PDF text/icon */
-  width: 32px; height: 32px;
-  background: rgba(93, 126, 93, 0.1); /* Faded green */
+.pdf-indicator {
+  width: 32px;
+  height: 32px;
+  background: rgba(93, 126, 93, 0.1);
   border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0 auto 8px;
   color: var(--pdf-icon-color);
   font-weight: bold;
   font-size: 14px;
 }
 
-.metric-text { /* Class for connected status/gemini text */
+.metric-text {
   font-size: 12px;
   color: #7d8f7d;
 }
 
-.metric-indicator-dot { /* Class for connected pulse dot */
-  background: var(--accent); /* Copper for status dot */
-}
-
-.status-box { /* Class for status box around gemini-2.5-flash */
+.status-box {
   background: #fbfbf7;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -191,7 +189,6 @@ p {
   margin-top: 10px;
 }
 
-/* Workspace header styles */
 .canvas-header {
   border-bottom: 1px solid var(--border-sep);
   padding: 0 24px;
@@ -204,7 +201,7 @@ p {
 .workspace-breadcrumb {
   font-size: 12px;
   padding: 4px 8px;
-  background: rgba(93, 126, 93, 0.05); /* very pale green */
+  background: rgba(93, 126, 93, 0.05);
   border-radius: 4px;
   color: #7d8f7d;
   font-family: var(--mono);
@@ -229,24 +226,26 @@ p {
   color: #7d8f7d;
 }
 
+/* FIX: Changed Tailwind bracket shorthand to pure valid CSS property values */
 .chat-bubble-user {
-  max-w-[75%];
+  max-width: 75%;
   padding: 16px;
   border-radius: 12px;
   border-bottom-right-radius: 0;
-  background: var(--button-bg); /* Moss green user bubble */
+  background: var(--button-bg);
   color: #fff;
   font-size: 15px;
   line-height: 1.5;
   margin-left: auto;
 }
 
+/* FIX: Changed Tailwind bracket shorthand to pure valid CSS property values */
 .chat-bubble-assistant {
-  max-w-[75%];
+  max-width: 75%;
   padding: 16px;
   border-radius: 12px;
   border-bottom-left-radius: 0;
-  background: #fdfdfa; /* Pure white bubble */
+  background: #fdfdfa;
   border: 1px solid #ebedeb;
   color: var(--text);
   font-size: 15px;
@@ -273,21 +272,19 @@ p {
   color: var(--text-h);
 }
 
-/* Modified global 'code' with earth theme */
 code {
   font-size: 15px;
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
-  color: #5d7e5d; /* Medium green for code text */
+  color: #5d7e5d;
 }
 
-/* Buttons and Counter with Earth theme */
 .counter {
   color: var(--accent);
 }
 
-.primary-button { /* Class for send/execute button */
+.primary-button {
   background: var(--button-bg);
   color: #fff;
   border: none;
@@ -300,11 +297,6 @@ code {
   background: var(--button-hover);
 }
 
-/* Native PDF button styles */
-button.file-input-wrapper {
-  background: var(--button-bg);
-  border-radius: 12px;
-}
 input[type="file"]::file-selector-button {
   background-color: var(--button-bg);
   color: #fff;
