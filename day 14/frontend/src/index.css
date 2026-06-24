@@ -1,19 +1,16 @@
 :root {
-  --text: #3a503a;
-  --text-h: #1e301e;
-  --bg: #faf9f6;
-  --border: #e0e6df;
-  --code-bg: #f5f2e8;
-  --accent: #b86b4f;
-
   --sans:
-    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --mono:
+    ui-monospace, SFMono-Regular, SF Pro Mono, Menlo, Monaco, Consolas,
+    monospace;
 
-  font: 14px/150% var(--sans);
-  color-scheme: light;
-  color: var(--text);
-  background: var(--bg);
+  font-family: var(--sans);
+  background-color: #faf9f6;
+  color: #2c3e2c;
+  font-size: 14px;
+  line-height: 1.5;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -22,7 +19,6 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--bg);
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -31,40 +27,20 @@ body {
 #root {
   width: 100%;
   height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--sans);
+  color: #1e301e;
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Precise CSS Micro Animations for Modern SaaS Transitions */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-code {
-  font-family: var(--mono);
-  font-size: 12px;
-  padding: 3px 6px;
-  background: var(--code-bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: #2e442e;
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -72,10 +48,10 @@ code {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e0e6df;
-  border-radius: 9999px;
+  background: #e3e8e1;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #c8d1c6;
+  background: #cad2c9;
 }

@@ -484,7 +484,7 @@ function App() {
     const currentMessage = input;
     setInput("");
     setIsStreaming(true);
-    setStatusMessage("Routing contextual vector embeddings...");
+    setStatusMessage("Routing semantic vectors...");
 
     try {
       const response = await fetch(
@@ -549,8 +549,7 @@ function App() {
         ...prev,
         {
           role: "assistant",
-          content:
-            "Pipeline execution interrupted. Please verify server connectivity.",
+          content: "Pipeline execution failure. System re-routing blocked.",
         },
       ]);
     } finally {
@@ -575,9 +574,7 @@ function App() {
       );
       setUploadedFile(file.name);
     } catch (error) {
-      alert(
-        "Vector engine indexing operation aborted. Check infrastructure logs.",
-      );
+      alert("Ingestion aborted. Verify infrastructure partition status.");
     } finally {
       setIsUploading(false);
     }
@@ -592,43 +589,42 @@ function App() {
       setUploadedFile(null);
       setStatusMessage(null);
     } catch (error) {
-      alert("Failed to purge session metadata state.");
+      alert("Failed to drop session constraints.");
     }
   };
 
   return (
-    <div className="flex h-screen w-screen bg-[#faf9f6] font-sans overflow-hidden antialiased select-none text-[#3a503a]">
-      {/* SIDE PANEL: Document Control Center */}
-      <aside className="w-80 bg-[#f5f2e8] border-r border-[#e0e6df] p-6 flex flex-col justify-between h-full shrink-0 shadow-[2px_0_8px_rgba(74,108,74,0.02)]">
-        <div className="space-y-8">
-          {/* Professional Platform Header */}
-          <div className="flex items-center gap-3.5">
-            <div className="h-10 w-10 bg-[#4a6c4a] rounded-xl flex items-center justify-center font-serif text-white font-bold text-lg shadow-md shadow-emerald-950/20 tracking-wider">
-              Doc
-            </div>
-            <div>
-              <h1 className="text-[15px] font-bold tracking-tight text-[#1e301e] m-0 uppercase">
-                DocuMind Core
-              </h1>
-              <p className="text-[11px] text-[#7d8f7d] font-mono tracking-wider mt-0.5 uppercase">
-                RAG Engine v1.0.0
-              </p>
-            </div>
+    <div className="flex h-screen w-screen bg-[#faf9f6] text-[#2c3e2c] font-sans overflow-hidden antialiased select-none">
+      {/* MINIMAL NAVIGATION STRIPE */}
+      <nav className="w-16 bg-[#f4f1e6] border-r border-[#e3e8e1] flex flex-col items-center py-6 justify-between shrink-0">
+        <div className="flex flex-col items-center gap-6">
+          <div className="h-9 w-9 bg-[#1e301e] rounded-lg flex items-center justify-center text-[#faf9f6] font-mono text-sm font-bold shadow-sm">
+            Ω
+          </div>
+          <div className="h-px w-6 bg-[#e3e8e1]" />
+          <div className="h-8 w-8 rounded-md bg-[#fff] border border-[#e3e8e1] flex items-center justify-center text-xs text-[#4a6c4a] shadow-sm cursor-pointer font-bold">
+            [{uploadedFile ? "1" : "0"}]
+          </div>
+        </div>
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-2 w-2 rounded-full bg-[#4a6c4a] animate-pulse" />
+        </div>
+      </nav>
+
+      {/* DATA CONTROLS INTERFACE PANEL */}
+      <aside className="w-72 bg-[#fbfaf5] border-r border-[#e3e8e1] p-5 flex flex-col justify-between h-full shrink-0">
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-[11px] font-bold tracking-widest text-[#7d8f7d] uppercase font-mono">
+              Context Pipeline
+            </h2>
+            <p className="text-xs text-[#5a705a] mt-1 leading-normal">
+              Isolate knowledge boundaries per runtime block.
+            </p>
           </div>
 
-          {/* Action Context Layout */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <label className="text-[11px] font-bold tracking-widest uppercase text-[#7d8f7d]">
-                Data Source Ingestion
-              </label>
-              {uploadedFile && (
-                <span className="h-2 w-2 rounded-full bg-[#b86b4f] animate-pulse" />
-              )}
-            </div>
-
-            {/* Draggable/Interactive Upload Box Container */}
-            <div className="relative group border border-dashed border-[#c8d1c6] hover:border-[#4a6c4a] bg-[#faf9f6]/70 hover:bg-[#fff] rounded-xl p-6 transition-all duration-300 text-center shadow-inner cursor-pointer">
+          <div className="space-y-3">
+            <div className="relative border border-dashed border-[#cad2c9] hover:border-[#4a6c4a] bg-[#fff]/50 hover:bg-[#fff] rounded-xl p-5 transition-all duration-200 text-center cursor-pointer group shadow-sm">
               <input
                 type="file"
                 accept=".pdf"
@@ -638,110 +634,91 @@ function App() {
               />
 
               {isUploading ? (
-                <div className="py-2 space-y-3">
-                  <div className="animate-spin w-5 h-5 border-[2.5px] border-[#4a6c4a] border-t-transparent rounded-full mx-auto" />
-                  <p className="text-xs font-medium tracking-tight text-[#4a6c4a]">
-                    Generating vector tokens...
+                <div className="py-2 space-y-2">
+                  <div className="animate-spin w-4 h-4 border-2 border-[#4a6c4a] border-t-transparent rounded-full mx-auto" />
+                  <p className="text-[11px] font-medium text-[#4a6c4a] font-mono">
+                    Indexing chunks...
                   </p>
                 </div>
               ) : uploadedFile ? (
-                <div className="space-y-2">
-                  <div className="w-7 h-7 bg-[#4a6c4a]/10 text-[#4a6c4a] rounded-lg flex items-center justify-center mx-auto text-xs font-bold font-mono">
-                    PDF
+                <div className="space-y-1.5 text-left">
+                  <div className="text-[10px] uppercase font-bold tracking-wider text-[#b86b4f] font-mono">
+                    Active Document
                   </div>
-                  <p className="text-xs font-semibold text-[#1e301e] truncate max-w-full px-1">
+                  <p className="text-xs font-semibold text-[#1e301e] truncate">
                     {uploadedFile}
-                  </p>
-                  <p className="text-[10px] font-bold tracking-wider uppercase text-[#b86b4f] bg-[#b86b4f]/10 py-0.5 px-2 rounded inline-block">
-                    Indexed & Active
                   </p>
                 </div>
               ) : (
-                <div className="py-2">
-                  <span className="text-[#4a6c4a] text-lg font-light block mb-1 group-hover:scale-110 transition-transform duration-200">
-                    +
-                  </span>
+                <div className="py-1">
                   <p className="text-xs text-[#1e301e] font-semibold">
-                    Incorporate Knowledge Asset
+                    Incorporate Knowledge Ingestion
                   </p>
-                  <p className="text-[10px] text-[#7d8f7d] mt-1 font-mono">
-                    Accepts native format .PDF
+                  <p className="text-[10px] text-[#7d8f7d] font-mono mt-0.5">
+                    Automated Pinecone vector sync
                   </p>
                 </div>
               )}
             </div>
 
-            {/* Premium Flush Purge Workspace Interface Element */}
             {messages.length > 0 && (
               <button
                 onClick={clearChatHistory}
-                className="w-full text-[11px] py-2.5 px-3 border border-[#e0e6df] bg-[#fff] hover:bg-[#fff7f5] hover:border-[#f3ded7] text-[#b86b4f] rounded-lg transition-all duration-200 font-semibold tracking-wide shadow-sm"
+                className="w-full text-[11px] py-2 px-3 border border-[#e3e8e1] bg-[#fff] hover:bg-[#fffcfb] hover:border-[#f5ded7] text-[#b86b4f] rounded-lg transition-all font-semibold font-mono shadow-sm"
               >
-                Reset Chat & Memory State
+                Clear History Matrix
               </button>
             )}
           </div>
         </div>
 
-        {/* Distributed Runtime Architecture Metrics Status Box */}
-        <div className="pt-5 border-t border-[#d8dfd0]">
-          <div className="flex items-center justify-between text-[11px] font-mono text-[#7d8f7d] mb-2.5 px-0.5">
-            <span className="tracking-tight">Infrastructure Stack</span>
-            <span className="text-[#4a6c4a] font-bold flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#4a6c4a]" /> Sync
-              Active
-            </span>
+        {/* Distributed Diagnostic Ledger metrics */}
+        <div className="pt-4 border-t border-[#e3e8e1] space-y-2">
+          <div className="flex justify-between items-center text-[10px] font-mono text-[#7d8f7d]">
+            <span>NODE STATUS</span>
+            <span className="font-bold text-[#4a6c4a]">PROD_OK</span>
           </div>
-          <div className="space-y-1.5 font-mono text-[11px] text-[#3a503a]">
-            <div className="bg-[#faf9f6] border border-[#e0e6df] px-3 py-2 rounded-lg flex items-center justify-between">
-              <span className="text-[#7d8f7d]">LLM Target:</span>
-              <span className="font-semibold text-[#1e301e]">
-                gemini-2.5-flash
-              </span>
+          <div className="bg-[#f4f1e6]/40 border border-[#e3e8e1] p-2.5 rounded-lg font-mono text-[10px] text-[#5a705a] space-y-1">
+            <div className="flex justify-between">
+              <span className="text-[#8fa38f]">Model:</span>
+              <span className="text-[#1e301e] font-semibold">gemini-2.5</span>
             </div>
-            <div className="bg-[#faf9f6] border border-[#e0e6df] px-3 py-2 rounded-lg flex items-center justify-between">
-              <span className="text-[#7d8f7d]">Vector Store:</span>
-              <span className="font-semibold text-[#1e301e]">
-                pinecone-serverless
-              </span>
+            <div className="flex justify-between">
+              <span className="text-[#8fa38f]">Vector:</span>
+              <span className="text-[#1e301e] font-semibold">pinecone_db</span>
             </div>
           </div>
         </div>
       </aside>
 
-      {/* MAIN LAYOUT CANVAS: Interactive Conversational Layer */}
-      <main className="flex-1 flex flex-col h-full bg-[#faf9f6] relative">
-        {/* Horizontal Navigation Control Path Header */}
-        <header className="h-16 border-b border-[#e8ebe6] px-8 flex items-center justify-between bg-[#fff]/60 backdrop-blur-md z-10 shadow-[0_1px_2px_rgba(0,0,0,0.01)]">
-          <div className="flex items-center gap-2.5 font-mono text-xs">
-            <span className="px-2 py-0.5 rounded-md bg-[#f5f2e8] border border-[#e0e6df] text-[#7d8f7d] text-[11px] font-semibold tracking-wider uppercase">
-              Isolated Session
-            </span>
+      {/* CHAT CANVAS ARCHITECTURE LAYER */}
+      <main className="flex-1 flex flex-col h-full bg-[#faf9f6]">
+        <header className="h-14 border-b border-[#e3e8e1] px-8 flex items-center justify-between bg-[#fff]/30 backdrop-blur-md z-10">
+          <div className="flex items-center gap-2 font-mono text-[11px]">
+            <span className="text-[#7d8f7d]">RUNTIME CLUSTER</span>
             <span className="text-gray-300">/</span>
-            <span className="text-[#1e301e] font-medium tracking-tight">
-              Agent Retrieval Pipeline Canvas
-            </span>
+            <span className="text-[#1e301e] font-semibold">SESSION_ACTIVE</span>
           </div>
         </header>
 
-        {/* Scrollable Message Workspace Stream Window */}
+        {/* Clean canvas using modern left-and-right structural layouts */}
         <div
           ref={chatContainerRef}
-          className="flex-1 overflow-y-auto px-12 py-10 space-y-8"
+          className="flex-1 overflow-y-auto px-16 py-8 space-y-8"
         >
           {messages.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center max-w-md mx-auto text-center space-y-5 animate-fade-in">
-              <div className="h-14 w-14 bg-[#fff] border border-[#e0e6df] rounded-2xl flex items-center justify-center text-xl shadow-[0_4px_12px_rgba(74,108,74,0.04)]">
-                🌲
+            <div className="h-full flex flex-col items-center justify-center max-w-sm mx-auto text-center space-y-4">
+              <div className="h-10 w-10 bg-[#fff] border border-[#e3e8e1] rounded-xl flex items-center justify-center text-sm shadow-sm text-[#4a6c4a]">
+                ⚡
               </div>
-              <div className="space-y-2">
-                <h3 className="text-[15px] font-bold text-[#1e301e] tracking-tight">
-                  Context-Aware Neural Workspace
+              <div>
+                <h3 className="text-xs font-bold text-[#1e301e] tracking-wider uppercase font-mono">
+                  Neural Retrieval Terminal
                 </h3>
-                <p className="text-xs text-[#7d8f7d] leading-relaxed max-w-sm mx-auto">
-                  Upload an analytical PDF ledger or codebase architecture
-                  summary documentation file on the left configuration column to
-                  query via semantic search parameters.
+                <p className="text-xs text-[#7d8f7d] leading-relaxed mt-1">
+                  System parses document vectors automatically. Contextual query
+                  routing switches gracefully to live search fallbacks if
+                  document assertions fall short.
                 </p>
               </div>
             </div>
@@ -749,24 +726,23 @@ function App() {
             messages.map((msg, i) => (
               <div
                 key={i}
-                className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
+                className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[70%] px-5 py-4 rounded-xl text-[13.5px] leading-relaxed tracking-wide shadow-sm transition-all ${
+                  className={`max-w-[75%] px-1 py-1 text-sm leading-relaxed ${
                     msg.role === "user"
-                      ? "bg-[#4a6c4a] text-[#fff] font-medium rounded-br-none shadow-[0_4px_12px_rgba(74,108,74,0.15)]"
-                      : "bg-[#fff] text-[#3a503a] border border-[#ebedeb] rounded-bl-none"
+                      ? "text-[#1e301e] font-semibold border-r-2 border-[#4a6c4a] pr-4 text-right"
+                      : "text-[#2c3e2c] border-l border-[#e3e8e1] pl-4 text-left font-normal"
                   }`}
                 >
                   {msg.content ? (
-                    <span className="whitespace-pre-wrap select-text">
-                      {msg.content}
-                    </span>
+                    <div className="whitespace-pre-wrap">{msg.content}</div>
                   ) : (
-                    <div className="flex items-center gap-2 py-1 px-1">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#b86b4f] animate-bounce [animation-delay:-0.3s]" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#b86b4f] animate-bounce [animation-delay:-0.15s]" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#b86b4f] animate-bounce" />
+                    <div className="flex items-center gap-1.5 py-1">
+                      <span className="h-1 w-1 rounded-full bg-[#b86b4f] animate-ping" />
+                      <span className="text-[10px] font-mono tracking-widest text-[#b86b4f] uppercase font-bold">
+                        Awaiting Stream Chunk
+                      </span>
                     </div>
                   )}
                 </div>
@@ -774,20 +750,20 @@ function App() {
             ))
           )}
 
-          {/* Inline Micro-Agent Execution Agent Indicator Label */}
+          {/* Micro status state indicator badge */}
           {statusMessage && (
-            <div className="flex justify-start animate-pulse">
-              <div className="text-[11px] font-mono font-bold tracking-wider text-[#b86b4f] bg-[#fdfaf7] border border-[#f3ded7] py-1.5 px-3 rounded-lg shadow-sm flex items-center gap-2 uppercase">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#b86b4f] animate-ping" />
-                Runtime State: {statusMessage}
+            <div className="flex justify-start">
+              <div className="text-[10px] font-mono font-bold tracking-widest text-[#b86b4f] bg-[#fff] border border-[#f5ded7] py-1 px-2.5 rounded flex items-center gap-2 uppercase shadow-sm">
+                <span className="h-1 w-1 rounded-full bg-[#b86b4f] animate-pulse" />
+                {statusMessage}
               </div>
             </div>
           )}
         </div>
 
-        {/* Input Dock Lower Execution Core Container */}
-        <footer className="p-8 bg-gradient-to-t from-[#faf9f6] via-[#faf9f6] to-transparent">
-          <div className="max-w-3xl mx-auto flex gap-3.5 bg-[#fff] border border-[#e0e6df] focus-within:border-[#4a6c4a] focus-within:shadow-[0_8px_24px_rgba(74,108,74,0.06)] rounded-xl p-2.5 transition-all duration-300 shadow-[0_4px_18px_rgba(0,0,0,0.015)]">
+        {/* Bottom Input Area */}
+        <footer className="p-6 bg-gradient-to-t from-[#faf9f6] via-[#faf9f6] to-transparent">
+          <div className="max-w-3xl mx-auto flex items-center bg-[#fff] border border-[#e3e8e1] focus-within:border-[#4a6c4a] rounded-xl p-2 transition-all duration-200 shadow-sm">
             <input
               type="text"
               value={input}
@@ -795,18 +771,18 @@ function App() {
               onKeyPress={(e) => e.key === "Enter" && sendMessage()}
               placeholder={
                 uploadedFile
-                  ? "Ask a specific query from the loaded knowledge store context asset..."
-                  : "Trigger analytical prompt query to search the workspace index..."
+                  ? "Query document variables..."
+                  : "Awaiting document load context optimization..."
               }
-              className="flex-1 bg-transparent border-0 outline-none px-3 text-xs md:text-sm font-medium text-[#1e301e] placeholder-[#c4ccc1]"
+              className="flex-1 bg-transparent border-0 outline-none px-3 text-xs md:text-sm font-medium text-[#1e301e] placeholder-[#b2bcae]"
               disabled={isStreaming}
             />
             <button
               onClick={sendMessage}
               disabled={isStreaming || !input.trim()}
-              className="bg-[#4a6c4a] hover:bg-[#3d593d] disabled:bg-[#f5f2e8] text-[#fff] disabled:text-[#c4ccc1] px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-md shadow-emerald-950/5 flex items-center justify-center shrink-0"
+              className="bg-[#1e301e] hover:bg-[#2d442d] disabled:bg-[#f4f1e6] text-[#faf9f6] disabled:text-[#cad2c9] px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider font-mono transition-all duration-150 shrink-0 shadow-sm"
             >
-              {isStreaming ? "Processing" : "Execute Prompt"}
+              {isStreaming ? "RUNNING" : "EXECUTE"}
             </button>
           </div>
         </footer>
