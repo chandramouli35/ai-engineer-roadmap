@@ -87,7 +87,10 @@ function App() {
     formData.append("file", file);
 
     try {
-      await axios.post("http://localhost:8000/upload", formData);
+      await axios.post(
+        "https://ai-document-backend-m5lc.onrender.com/upload",
+        formData,
+      );
       alert("PDF uploaded successfully!");
     } catch (error) {
       alert("Upload failed");
