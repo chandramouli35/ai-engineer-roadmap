@@ -1,3 +1,172 @@
+// // import { useState, useRef, useEffect } from "react";
+// // import axios from "axios";
+
+// // interface Message {
+// //   role: "user" | "assistant";
+// //   content: string;
+// // }
+
+// // function App() {
+// //   const [messages, setMessages] = useState<Message[]>([]);
+// //   const [input, setInput] = useState("");
+// //   const [isStreaming, setIsStreaming] = useState(false);
+// //   const [isUploading, setIsUploading] = useState(false);
+// //   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+// //   // Auto scroll to bottom
+// //   useEffect(() => {
+// //     chatContainerRef.current?.scrollTo({
+// //       top: chatContainerRef.current.scrollHeight,
+// //       behavior: "smooth",
+// //     });
+// //   }, [messages]);
+
+// //   const sendMessage = async () => {
+// //     if (!input.trim() || isStreaming) return;
+
+// //     const userMessage: Message = { role: "user", content: input };
+// //     setMessages((prev) => [...prev, userMessage]);
+// //     const currentMessage = input;
+// //     setInput("");
+// //     setIsStreaming(true);
+
+// //     try {
+// //       const response = await fetch(
+// //         "https://ai-document-backend-m5lc.onrender.com/chat/stream",
+// //         {
+// //           method: "POST",
+// //           headers: { "Content-Type": "application/json" },
+// //           body: JSON.stringify({ message: currentMessage }),
+// //         },
+// //       );
+
+// //       const reader = response.body?.getReader();
+// //       if (!reader) return;
+
+// //       let assistantMessage = "";
+// //       setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
+
+// //       while (true) {
+// //         const { done, value } = await reader.read();
+// //         if (done) break;
+
+// //         const text = new TextDecoder().decode(value);
+// //         const lines = text.split("\n");
+
+// //         for (const line of lines) {
+// //           if (line.startsWith("data: ")) {
+// //             const content = line.replace("data: ", "");
+// //             if (content === "[DONE]") continue;
+
+// //             assistantMessage += content;
+// //             setMessages((prev) => {
+// //               const newMessages = [...prev];
+// //               newMessages[newMessages.length - 1].content = assistantMessage;
+// //               return newMessages;
+// //             });
+// //           }
+// //         }
+// //       }
+// //     } catch (error) {
+// //       console.error(error);
+// //       setMessages((prev) => [
+// //         ...prev,
+// //         { role: "assistant", content: "Sorry, something went wrong." },
+// //       ]);
+// //     } finally {
+// //       setIsStreaming(false);
+// //     }
+// //   };
+
+// //   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+// //     const file = e.target.files?.[0];
+// //     if (!file) return;
+
+// //     setIsUploading(true);
+// //     const formData = new FormData();
+// //     formData.append("file", file);
+
+// //     try {
+// //       await axios.post(
+// //         "https://ai-document-backend-m5lc.onrender.com/upload",
+// //         formData,
+// //       );
+// //       alert("PDF uploaded successfully!");
+// //     } catch (error) {
+// //       alert("Upload failed");
+// //     } finally {
+// //       setIsUploading(false);
+// //     }
+// //   };
+
+// //   return (
+// //     <div className="min-h-screen bg-gray-950 text-white">
+// //       <div className="max-w-4xl mx-auto p-4">
+// //         <h1 className="text-3xl font-bold text-center mb-8 text-blue-400">
+// //           AI Document Assistant
+// //         </h1>
+
+// //         {/* Upload Section */}
+// //         <div className="mb-6 bg-gray-900 p-4 rounded-xl">
+// //           <label className="block text-sm mb-2">Upload PDF Document</label>
+// //           <input
+// //             type="file"
+// //             accept=".pdf"
+// //             onChange={handleFileUpload}
+// //             disabled={isUploading}
+// //             className="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+// //           />
+// //         </div>
+
+// //         {/* Chat Window */}
+// //         <div
+// //           ref={chatContainerRef}
+// //           className="h-[60vh] overflow-y-auto bg-gray-900 rounded-2xl p-6 mb-4 space-y-4"
+// //         >
+// //           {messages.length === 0 && (
+// //             <p className="text-gray-500 text-center mt-10">
+// //               Upload a PDF and start chatting...
+// //             </p>
+// //           )}
+// //           {messages.map((msg, i) => (
+// //             <div
+// //               key={i}
+// //               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+// //             >
+// //               <div
+// //                 className={`max-w-[80%] p-4 rounded-2xl ${msg.role === "user" ? "bg-blue-600" : "bg-gray-800"}`}
+// //               >
+// //                 {msg.content}
+// //               </div>
+// //             </div>
+// //           ))}
+// //         </div>
+
+// //         {/* Input */}
+// //         <div className="flex gap-3">
+// //           <input
+// //             type="text"
+// //             value={input}
+// //             onChange={(e) => setInput(e.target.value)}
+// //             onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+// //             placeholder="Ask anything about your document..."
+// //             className="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-5 py-4 focus:outline-none focus:border-blue-500"
+// //             disabled={isStreaming}
+// //           />
+// //           <button
+// //             onClick={sendMessage}
+// //             disabled={isStreaming || !input.trim()}
+// //             className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 px-8 rounded-xl font-medium"
+// //           >
+// //             {isStreaming ? "Thinking..." : "Send"}
+// //           </button>
+// //         </div>
+// //       </div>
+// //     </div>
+// //   );
+// // }
+
+// // export default App;
 // import { useState, useRef, useEffect } from "react";
 // import axios from "axios";
 
@@ -11,9 +180,10 @@
 //   const [input, setInput] = useState("");
 //   const [isStreaming, setIsStreaming] = useState(false);
 //   const [isUploading, setIsUploading] = useState(false);
+//   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
 //   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-//   // Auto scroll to bottom
+//   // Auto scroll to bottom smoothly
 //   useEffect(() => {
 //     chatContainerRef.current?.scrollTo({
 //       top: chatContainerRef.current.scrollHeight,
@@ -71,7 +241,11 @@
 //       console.error(error);
 //       setMessages((prev) => [
 //         ...prev,
-//         { role: "assistant", content: "Sorry, something went wrong." },
+//         {
+//           role: "assistant",
+//           content:
+//             "Something went wrong. Please verify your connection or try again.",
+//         },
 //       ]);
 //     } finally {
 //       setIsStreaming(false);
@@ -91,75 +265,182 @@
 //         "https://ai-document-backend-m5lc.onrender.com/upload",
 //         formData,
 //       );
-//       alert("PDF uploaded successfully!");
+//       setUploadedFile(file.name);
 //     } catch (error) {
-//       alert("Upload failed");
+//       alert("Upload failed. Make sure your backend service is awake.");
 //     } finally {
 //       setIsUploading(false);
 //     }
 //   };
 
 //   return (
-//     <div className="min-h-screen bg-gray-950 text-white">
-//       <div className="max-w-4xl mx-auto p-4">
-//         <h1 className="text-3xl font-bold text-center mb-8 text-blue-400">
-//           AI Document Assistant
-//         </h1>
+//     <div className="flex flex-col lg:flex-row h-screen w-full bg-[#0d0e12] text-gray-100 font-sans overflow-hidden">
+//       {/* LEFT PANEL: Control Sidebar */}
+//       <div className="w-full lg:w-[320px] bg-[#14161e] border-b lg:border-b-0 lg:border-r border-[#242731] p-6 flex flex-col justify-between shrink-0">
+//         <div>
+//           {/* Branded Header */}
+//           <div className="flex items-center gap-3 mb-8">
+//             <div className="h-9 w-9 bg-purple-600 rounded-xl flex items-center justify-center font-bold text-white shadow-lg shadow-purple-900/30">
+//               Ω
+//             </div>
+//             <div>
+//               <h2 className="text-lg font-semibold tracking-tight text-white m-0">
+//                 DocuMind AI
+//               </h2>
+//               <p className="text-xs text-gray-500">v1.0 • Enterprise Suite</p>
+//             </div>
+//           </div>
 
-//         {/* Upload Section */}
-//         <div className="mb-6 bg-gray-900 p-4 rounded-xl">
-//           <label className="block text-sm mb-2">Upload PDF Document</label>
-//           <input
-//             type="file"
-//             accept=".pdf"
-//             onChange={handleFileUpload}
-//             disabled={isUploading}
-//             className="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-//           />
+//           {/* Upload Area styled like premium SaaS */}
+//           <div className="space-y-3">
+//             <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400">
+//               Source Document
+//             </label>
+
+//             <div className="relative group border-2 border-dashed border-[#2e313e] hover:border-purple-500/50 bg-[#1a1c26] rounded-xl p-5 transition-all duration-200 text-center cursor-pointer">
+//               <input
+//                 type="file"
+//                 accept=".pdf"
+//                 onChange={handleFileUpload}
+//                 disabled={isUploading}
+//                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+//               />
+
+//               {isUploading ? (
+//                 <div className="space-y-2">
+//                   <div className="animate-spin w-5 h-5 border-2 border-purple-500 border-t-transparent rounded-full mx-auto" />
+//                   <p className="text-sm text-gray-400">
+//                     Ingesting text lines...
+//                   </p>
+//                 </div>
+//               ) : uploadedFile ? (
+//                 <div>
+//                   <div className="w-8 h-8 bg-purple-500/10 text-purple-400 rounded-lg flex items-center justify-center mx-auto mb-2 text-sm font-bold">
+//                     PDF
+//                   </div>
+//                   <p className="text-sm font-medium text-gray-200 truncate px-2">
+//                     {uploadedFile}
+//                   </p>
+//                   <p className="text-xs text-purple-400 mt-1 font-medium">
+//                     Ready to analyze
+//                   </p>
+//                 </div>
+//               ) : (
+//                 <div>
+//                   <div className="text-gray-400 text-xl mb-1">+</div>
+//                   <p className="text-sm text-gray-300 font-medium">
+//                     Drop or Upload PDF
+//                   </p>
+//                   <p className="text-xs text-gray-500 mt-0.5">Max size 10MB</p>
+//                 </div>
+//               )}
+//             </div>
+//           </div>
 //         </div>
 
-//         {/* Chat Window */}
+//         {/* System Status Metrics */}
+//         <div className="hidden lg:block pt-6 border-t border-[#242731]">
+//           <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+//             <span>LLM Core Engine</span>
+//             <span className="text-green-400 flex items-center gap-1">
+//               <span className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />{" "}
+//               Connected
+//             </span>
+//           </div>
+//           <div className="bg-[#1a1c26] text-[11px] font-mono p-2.5 rounded-lg border border-[#242731] text-gray-400 truncate">
+//             gemini-2.5-flash
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* RIGHT PANEL: The Main Canvas */}
+//       <div className="flex-1 flex flex-col h-full bg-[#0d0e12] relative">
+//         {/* Dynamic Canvas Header */}
+//         <div className="h-16 border-b border-[#242731] px-6 flex items-center justify-between bg-[#0d0e12]/80 backdrop-blur-md z-10">
+//           <div className="flex items-center gap-2">
+//             <span className="text-xs px-2 py-0.5 rounded bg-gray-800 text-gray-400 font-mono">
+//               Workspace
+//             </span>
+//             <span className="text-gray-600">/</span>
+//             <h3 className="text-sm font-medium text-gray-200 m-0">
+//               Interactive Analysis Session
+//             </h3>
+//           </div>
+//         </div>
+
+//         {/* Messaging Stream Window */}
 //         <div
 //           ref={chatContainerRef}
-//           className="h-[60vh] overflow-y-auto bg-gray-900 rounded-2xl p-6 mb-4 space-y-4"
+//           className="flex-1 overflow-y-auto px-6 py-8 space-y-6"
 //         >
-//           {messages.length === 0 && (
-//             <p className="text-gray-500 text-center mt-10">
-//               Upload a PDF and start chatting...
-//             </p>
-//           )}
-//           {messages.map((msg, i) => (
-//             <div
-//               key={i}
-//               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-//             >
-//               <div
-//                 className={`max-w-[80%] p-4 rounded-2xl ${msg.role === "user" ? "bg-blue-600" : "bg-gray-800"}`}
-//               >
-//                 {msg.content}
+//           {messages.length === 0 ? (
+//             <div className="h-full flex flex-col items-center justify-center max-w-md mx-auto text-center space-y-4">
+//               <div className="h-12 w-12 bg-[#14161e] border border-[#242731] rounded-2xl flex items-center justify-center text-gray-400 shadow-xl">
+//                 💬
+//               </div>
+//               <div>
+//                 <h3 className="text-base font-medium text-gray-200 mb-1">
+//                   Contextual Chat System
+//                 </h3>
+//                 <p className="text-sm text-gray-500 leading-relaxed">
+//                   Provide an input document file on the left side menu, then use
+//                   the terminal field below to trigger queries or summarize
+//                   specific metrics.
+//                 </p>
 //               </div>
 //             </div>
-//           ))}
+//           ) : (
+//             messages.map((msg, i) => (
+//               <div
+//                 key={i}
+//                 className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+//               >
+//                 <div
+//                   className={`max-w-[75%] p-4 rounded-xl text-sm leading-relaxed ${
+//                     msg.role === "user"
+//                       ? "bg-purple-600 text-white font-medium ml-12 rounded-br-none shadow-lg shadow-purple-900/10"
+//                       : "bg-[#14161e] text-gray-200 border border-[#242731] mr-12 rounded-bl-none"
+//                   }`}
+//                 >
+//                   {msg.content ? (
+//                     <span className="whitespace-pre-wrap">{msg.content}</span>
+//                   ) : (
+//                     <div className="flex items-center gap-1.5 py-1 px-0.5">
+//                       <span className="h-1.5 w-1.5 rounded-full bg-purple-400 animate-bounce [animation-delay:-0.3s]" />
+//                       <span className="h-1.5 w-1.5 rounded-full bg-purple-400 animate-bounce [animation-delay:-0.15s]" />
+//                       <span className="h-1.5 w-1.5 rounded-full bg-purple-400 animate-bounce" />
+//                     </div>
+//                   )}
+//                 </div>
+//               </div>
+//             ))
+//           )}
 //         </div>
 
-//         {/* Input */}
-//         <div className="flex gap-3">
-//           <input
-//             type="text"
-//             value={input}
-//             onChange={(e) => setInput(e.target.value)}
-//             onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-//             placeholder="Ask anything about your document..."
-//             className="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-5 py-4 focus:outline-none focus:border-blue-500"
-//             disabled={isStreaming}
-//           />
-//           <button
-//             onClick={sendMessage}
-//             disabled={isStreaming || !input.trim()}
-//             className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 px-8 rounded-xl font-medium"
-//           >
-//             {isStreaming ? "Thinking..." : "Send"}
-//           </button>
+//         {/* Input Dock Area */}
+//         <div className="p-6 bg-gradient-to-t from-[#0d0e12] via-[#0d0e12] to-transparent">
+//           <div className="max-w-3xl mx-auto flex gap-3 bg-[#14161e] border border-[#242731] focus-within:border-purple-500/60 rounded-xl p-2 transition-all shadow-2xl">
+//             <input
+//               type="text"
+//               value={input}
+//               onChange={(e) => setInput(e.target.value)}
+//               onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+//               placeholder={
+//                 uploadedFile
+//                   ? "Ask a question about this document..."
+//                   : "Upload a PDF first to begin analyzing..."
+//               }
+//               className="flex-1 bg-transparent border-0 outline-none px-3 text-sm text-white placeholder-gray-500 disabled:opacity-50"
+//               disabled={isStreaming}
+//             />
+//             <button
+//               onClick={sendMessage}
+//               disabled={isStreaming || !input.trim()}
+//               className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-800 text-white disabled:text-gray-600 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all shadow-md shadow-purple-900/20 flex items-center gap-2"
+//             >
+//               {isStreaming ? "Streaming" : "Execute"}
+//             </button>
+//           </div>
 //         </div>
 //       </div>
 //     </div>
@@ -167,13 +448,17 @@
 // }
 
 // export default App;
+
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 
 interface Message {
-  role: "user" | "assistant";
+  role: "user" | "assistant" | "status";
   content: string;
 }
+
+const RUNTIME_SESSION_ID =
+  "session_" + Math.random().toString(36).substring(2, 9);
 
 function App() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -181,15 +466,15 @@ function App() {
   const [isStreaming, setIsStreaming] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // Auto scroll to bottom smoothly
   useEffect(() => {
     chatContainerRef.current?.scrollTo({
       top: chatContainerRef.current.scrollHeight,
       behavior: "smooth",
     });
-  }, [messages]);
+  }, [messages, statusMessage]);
 
   const sendMessage = async () => {
     if (!input.trim() || isStreaming) return;
@@ -199,14 +484,21 @@ function App() {
     const currentMessage = input;
     setInput("");
     setIsStreaming(true);
+    setStatusMessage("Routing contextual vector embeddings...");
 
     try {
       const response = await fetch(
         "https://ai-document-backend-m5lc.onrender.com/chat/stream",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: currentMessage }),
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "text/event-stream",
+          },
+          body: JSON.stringify({
+            message: currentMessage,
+            session_id: RUNTIME_SESSION_ID,
+          }),
         },
       );
 
@@ -228,6 +520,20 @@ function App() {
             const content = line.replace("data: ", "");
             if (content === "[DONE]") continue;
 
+            if (content.startsWith("[STATUS:")) {
+              const statusValue = content
+                .replace("[STATUS: ", "")
+                .replace("]", "");
+              setStatusMessage(statusValue);
+              continue;
+            }
+
+            if (content.startsWith("Error occurred:")) {
+              assistantMessage = content;
+              break;
+            }
+
+            setStatusMessage(null);
             assistantMessage += content;
             setMessages((prev) => {
               const newMessages = [...prev];
@@ -244,11 +550,12 @@ function App() {
         {
           role: "assistant",
           content:
-            "Something went wrong. Please verify your connection or try again.",
+            "Pipeline execution interrupted. Please verify server connectivity.",
         },
       ]);
     } finally {
       setIsStreaming(false);
+      setStatusMessage(null);
     }
   };
 
@@ -262,130 +569,179 @@ function App() {
 
     try {
       await axios.post(
-        "https://ai-document-backend-m5lc.onrender.com/upload",
+        `https://ai-document-backend-m5lc.onrender.com/upload?session_id=${RUNTIME_SESSION_ID}`,
         formData,
+        { headers: { "Content-Type": "multipart/form-data" } },
       );
       setUploadedFile(file.name);
     } catch (error) {
-      alert("Upload failed. Make sure your backend service is awake.");
+      alert(
+        "Vector engine indexing operation aborted. Check infrastructure logs.",
+      );
     } finally {
       setIsUploading(false);
     }
   };
 
+  const clearChatHistory = async () => {
+    try {
+      await axios.delete(
+        `https://ai-document-backend-m5lc.onrender.com/session?session_id=${RUNTIME_SESSION_ID}`,
+      );
+      setMessages([]);
+      setUploadedFile(null);
+      setStatusMessage(null);
+    } catch (error) {
+      alert("Failed to purge session metadata state.");
+    }
+  };
+
   return (
-    <div className="flex flex-col lg:flex-row h-screen w-full bg-[#0d0e12] text-gray-100 font-sans overflow-hidden">
-      {/* LEFT PANEL: Control Sidebar */}
-      <div className="w-full lg:w-[320px] bg-[#14161e] border-b lg:border-b-0 lg:border-r border-[#242731] p-6 flex flex-col justify-between shrink-0">
-        <div>
-          {/* Branded Header */}
-          <div className="flex items-center gap-3 mb-8">
-            <div className="h-9 w-9 bg-purple-600 rounded-xl flex items-center justify-center font-bold text-white shadow-lg shadow-purple-900/30">
-              Ω
+    <div className="flex h-screen w-screen bg-[#faf9f6] font-sans overflow-hidden antialiased select-none text-[#3a503a]">
+      {/* SIDE PANEL: Document Control Center */}
+      <aside className="w-80 bg-[#f5f2e8] border-r border-[#e0e6df] p-6 flex flex-col justify-between h-full shrink-0 shadow-[2px_0_8px_rgba(74,108,74,0.02)]">
+        <div className="space-y-8">
+          {/* Professional Platform Header */}
+          <div className="flex items-center gap-3.5">
+            <div className="h-10 w-10 bg-[#4a6c4a] rounded-xl flex items-center justify-center font-serif text-white font-bold text-lg shadow-md shadow-emerald-950/20 tracking-wider">
+              Doc
             </div>
             <div>
-              <h2 className="text-lg font-semibold tracking-tight text-white m-0">
-                DocuMind AI
-              </h2>
-              <p className="text-xs text-gray-500">v1.0 • Enterprise Suite</p>
+              <h1 className="text-[15px] font-bold tracking-tight text-[#1e301e] m-0 uppercase">
+                DocuMind Core
+              </h1>
+              <p className="text-[11px] text-[#7d8f7d] font-mono tracking-wider mt-0.5 uppercase">
+                RAG Engine v1.0.0
+              </p>
             </div>
           </div>
 
-          {/* Upload Area styled like premium SaaS */}
-          <div className="space-y-3">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400">
-              Source Document
-            </label>
+          {/* Action Context Layout */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-[11px] font-bold tracking-widest uppercase text-[#7d8f7d]">
+                Data Source Ingestion
+              </label>
+              {uploadedFile && (
+                <span className="h-2 w-2 rounded-full bg-[#b86b4f] animate-pulse" />
+              )}
+            </div>
 
-            <div className="relative group border-2 border-dashed border-[#2e313e] hover:border-purple-500/50 bg-[#1a1c26] rounded-xl p-5 transition-all duration-200 text-center cursor-pointer">
+            {/* Draggable/Interactive Upload Box Container */}
+            <div className="relative group border border-dashed border-[#c8d1c6] hover:border-[#4a6c4a] bg-[#faf9f6]/70 hover:bg-[#fff] rounded-xl p-6 transition-all duration-300 text-center shadow-inner cursor-pointer">
               <input
                 type="file"
                 accept=".pdf"
                 onChange={handleFileUpload}
                 disabled={isUploading}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed z-20"
               />
 
               {isUploading ? (
-                <div className="space-y-2">
-                  <div className="animate-spin w-5 h-5 border-2 border-purple-500 border-t-transparent rounded-full mx-auto" />
-                  <p className="text-sm text-gray-400">
-                    Ingesting text lines...
+                <div className="py-2 space-y-3">
+                  <div className="animate-spin w-5 h-5 border-[2.5px] border-[#4a6c4a] border-t-transparent rounded-full mx-auto" />
+                  <p className="text-xs font-medium tracking-tight text-[#4a6c4a]">
+                    Generating vector tokens...
                   </p>
                 </div>
               ) : uploadedFile ? (
-                <div>
-                  <div className="w-8 h-8 bg-purple-500/10 text-purple-400 rounded-lg flex items-center justify-center mx-auto mb-2 text-sm font-bold">
+                <div className="space-y-2">
+                  <div className="w-7 h-7 bg-[#4a6c4a]/10 text-[#4a6c4a] rounded-lg flex items-center justify-center mx-auto text-xs font-bold font-mono">
                     PDF
                   </div>
-                  <p className="text-sm font-medium text-gray-200 truncate px-2">
+                  <p className="text-xs font-semibold text-[#1e301e] truncate max-w-full px-1">
                     {uploadedFile}
                   </p>
-                  <p className="text-xs text-purple-400 mt-1 font-medium">
-                    Ready to analyze
+                  <p className="text-[10px] font-bold tracking-wider uppercase text-[#b86b4f] bg-[#b86b4f]/10 py-0.5 px-2 rounded inline-block">
+                    Indexed & Active
                   </p>
                 </div>
               ) : (
-                <div>
-                  <div className="text-gray-400 text-xl mb-1">+</div>
-                  <p className="text-sm text-gray-300 font-medium">
-                    Drop or Upload PDF
+                <div className="py-2">
+                  <span className="text-[#4a6c4a] text-lg font-light block mb-1 group-hover:scale-110 transition-transform duration-200">
+                    +
+                  </span>
+                  <p className="text-xs text-[#1e301e] font-semibold">
+                    Incorporate Knowledge Asset
                   </p>
-                  <p className="text-xs text-gray-500 mt-0.5">Max size 10MB</p>
+                  <p className="text-[10px] text-[#7d8f7d] mt-1 font-mono">
+                    Accepts native format .PDF
+                  </p>
                 </div>
               )}
             </div>
+
+            {/* Premium Flush Purge Workspace Interface Element */}
+            {messages.length > 0 && (
+              <button
+                onClick={clearChatHistory}
+                className="w-full text-[11px] py-2.5 px-3 border border-[#e0e6df] bg-[#fff] hover:bg-[#fff7f5] hover:border-[#f3ded7] text-[#b86b4f] rounded-lg transition-all duration-200 font-semibold tracking-wide shadow-sm"
+              >
+                Reset Chat & Memory State
+              </button>
+            )}
           </div>
         </div>
 
-        {/* System Status Metrics */}
-        <div className="hidden lg:block pt-6 border-t border-[#242731]">
-          <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
-            <span>LLM Core Engine</span>
-            <span className="text-green-400 flex items-center gap-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />{" "}
-              Connected
+        {/* Distributed Runtime Architecture Metrics Status Box */}
+        <div className="pt-5 border-t border-[#d8dfd0]">
+          <div className="flex items-center justify-between text-[11px] font-mono text-[#7d8f7d] mb-2.5 px-0.5">
+            <span className="tracking-tight">Infrastructure Stack</span>
+            <span className="text-[#4a6c4a] font-bold flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#4a6c4a]" /> Sync
+              Active
             </span>
           </div>
-          <div className="bg-[#1a1c26] text-[11px] font-mono p-2.5 rounded-lg border border-[#242731] text-gray-400 truncate">
-            gemini-2.5-flash
+          <div className="space-y-1.5 font-mono text-[11px] text-[#3a503a]">
+            <div className="bg-[#faf9f6] border border-[#e0e6df] px-3 py-2 rounded-lg flex items-center justify-between">
+              <span className="text-[#7d8f7d]">LLM Target:</span>
+              <span className="font-semibold text-[#1e301e]">
+                gemini-2.5-flash
+              </span>
+            </div>
+            <div className="bg-[#faf9f6] border border-[#e0e6df] px-3 py-2 rounded-lg flex items-center justify-between">
+              <span className="text-[#7d8f7d]">Vector Store:</span>
+              <span className="font-semibold text-[#1e301e]">
+                pinecone-serverless
+              </span>
+            </div>
           </div>
         </div>
-      </div>
+      </aside>
 
-      {/* RIGHT PANEL: The Main Canvas */}
-      <div className="flex-1 flex flex-col h-full bg-[#0d0e12] relative">
-        {/* Dynamic Canvas Header */}
-        <div className="h-16 border-b border-[#242731] px-6 flex items-center justify-between bg-[#0d0e12]/80 backdrop-blur-md z-10">
-          <div className="flex items-center gap-2">
-            <span className="text-xs px-2 py-0.5 rounded bg-gray-800 text-gray-400 font-mono">
-              Workspace
+      {/* MAIN LAYOUT CANVAS: Interactive Conversational Layer */}
+      <main className="flex-1 flex flex-col h-full bg-[#faf9f6] relative">
+        {/* Horizontal Navigation Control Path Header */}
+        <header className="h-16 border-b border-[#e8ebe6] px-8 flex items-center justify-between bg-[#fff]/60 backdrop-blur-md z-10 shadow-[0_1px_2px_rgba(0,0,0,0.01)]">
+          <div className="flex items-center gap-2.5 font-mono text-xs">
+            <span className="px-2 py-0.5 rounded-md bg-[#f5f2e8] border border-[#e0e6df] text-[#7d8f7d] text-[11px] font-semibold tracking-wider uppercase">
+              Isolated Session
             </span>
-            <span className="text-gray-600">/</span>
-            <h3 className="text-sm font-medium text-gray-200 m-0">
-              Interactive Analysis Session
-            </h3>
+            <span className="text-gray-300">/</span>
+            <span className="text-[#1e301e] font-medium tracking-tight">
+              Agent Retrieval Pipeline Canvas
+            </span>
           </div>
-        </div>
+        </header>
 
-        {/* Messaging Stream Window */}
+        {/* Scrollable Message Workspace Stream Window */}
         <div
           ref={chatContainerRef}
-          className="flex-1 overflow-y-auto px-6 py-8 space-y-6"
+          className="flex-1 overflow-y-auto px-12 py-10 space-y-8"
         >
           {messages.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center max-w-md mx-auto text-center space-y-4">
-              <div className="h-12 w-12 bg-[#14161e] border border-[#242731] rounded-2xl flex items-center justify-center text-gray-400 shadow-xl">
-                💬
+            <div className="h-full flex flex-col items-center justify-center max-w-md mx-auto text-center space-y-5 animate-fade-in">
+              <div className="h-14 w-14 bg-[#fff] border border-[#e0e6df] rounded-2xl flex items-center justify-center text-xl shadow-[0_4px_12px_rgba(74,108,74,0.04)]">
+                🌲
               </div>
-              <div>
-                <h3 className="text-base font-medium text-gray-200 mb-1">
-                  Contextual Chat System
+              <div className="space-y-2">
+                <h3 className="text-[15px] font-bold text-[#1e301e] tracking-tight">
+                  Context-Aware Neural Workspace
                 </h3>
-                <p className="text-sm text-gray-500 leading-relaxed">
-                  Provide an input document file on the left side menu, then use
-                  the terminal field below to trigger queries or summarize
-                  specific metrics.
+                <p className="text-xs text-[#7d8f7d] leading-relaxed max-w-sm mx-auto">
+                  Upload an analytical PDF ledger or codebase architecture
+                  summary documentation file on the left configuration column to
+                  query via semantic search parameters.
                 </p>
               </div>
             </div>
@@ -393,33 +749,45 @@ function App() {
             messages.map((msg, i) => (
               <div
                 key={i}
-                className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
               >
                 <div
-                  className={`max-w-[75%] p-4 rounded-xl text-sm leading-relaxed ${
+                  className={`max-w-[70%] px-5 py-4 rounded-xl text-[13.5px] leading-relaxed tracking-wide shadow-sm transition-all ${
                     msg.role === "user"
-                      ? "bg-purple-600 text-white font-medium ml-12 rounded-br-none shadow-lg shadow-purple-900/10"
-                      : "bg-[#14161e] text-gray-200 border border-[#242731] mr-12 rounded-bl-none"
+                      ? "bg-[#4a6c4a] text-[#fff] font-medium rounded-br-none shadow-[0_4px_12px_rgba(74,108,74,0.15)]"
+                      : "bg-[#fff] text-[#3a503a] border border-[#ebedeb] rounded-bl-none"
                   }`}
                 >
                   {msg.content ? (
-                    <span className="whitespace-pre-wrap">{msg.content}</span>
+                    <span className="whitespace-pre-wrap select-text">
+                      {msg.content}
+                    </span>
                   ) : (
-                    <div className="flex items-center gap-1.5 py-1 px-0.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-purple-400 animate-bounce [animation-delay:-0.3s]" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-purple-400 animate-bounce [animation-delay:-0.15s]" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-purple-400 animate-bounce" />
+                    <div className="flex items-center gap-2 py-1 px-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#b86b4f] animate-bounce [animation-delay:-0.3s]" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#b86b4f] animate-bounce [animation-delay:-0.15s]" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#b86b4f] animate-bounce" />
                     </div>
                   )}
                 </div>
               </div>
             ))
           )}
+
+          {/* Inline Micro-Agent Execution Agent Indicator Label */}
+          {statusMessage && (
+            <div className="flex justify-start animate-pulse">
+              <div className="text-[11px] font-mono font-bold tracking-wider text-[#b86b4f] bg-[#fdfaf7] border border-[#f3ded7] py-1.5 px-3 rounded-lg shadow-sm flex items-center gap-2 uppercase">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#b86b4f] animate-ping" />
+                Runtime State: {statusMessage}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Input Dock Area */}
-        <div className="p-6 bg-gradient-to-t from-[#0d0e12] via-[#0d0e12] to-transparent">
-          <div className="max-w-3xl mx-auto flex gap-3 bg-[#14161e] border border-[#242731] focus-within:border-purple-500/60 rounded-xl p-2 transition-all shadow-2xl">
+        {/* Input Dock Lower Execution Core Container */}
+        <footer className="p-8 bg-gradient-to-t from-[#faf9f6] via-[#faf9f6] to-transparent">
+          <div className="max-w-3xl mx-auto flex gap-3.5 bg-[#fff] border border-[#e0e6df] focus-within:border-[#4a6c4a] focus-within:shadow-[0_8px_24px_rgba(74,108,74,0.06)] rounded-xl p-2.5 transition-all duration-300 shadow-[0_4px_18px_rgba(0,0,0,0.015)]">
             <input
               type="text"
               value={input}
@@ -427,22 +795,22 @@ function App() {
               onKeyPress={(e) => e.key === "Enter" && sendMessage()}
               placeholder={
                 uploadedFile
-                  ? "Ask a question about this document..."
-                  : "Upload a PDF first to begin analyzing..."
+                  ? "Ask a specific query from the loaded knowledge store context asset..."
+                  : "Trigger analytical prompt query to search the workspace index..."
               }
-              className="flex-1 bg-transparent border-0 outline-none px-3 text-sm text-white placeholder-gray-500 disabled:opacity-50"
+              className="flex-1 bg-transparent border-0 outline-none px-3 text-xs md:text-sm font-medium text-[#1e301e] placeholder-[#c4ccc1]"
               disabled={isStreaming}
             />
             <button
               onClick={sendMessage}
               disabled={isStreaming || !input.trim()}
-              className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-800 text-white disabled:text-gray-600 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all shadow-md shadow-purple-900/20 flex items-center gap-2"
+              className="bg-[#4a6c4a] hover:bg-[#3d593d] disabled:bg-[#f5f2e8] text-[#fff] disabled:text-[#c4ccc1] px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-md shadow-emerald-950/5 flex items-center justify-center shrink-0"
             >
-              {isStreaming ? "Streaming" : "Execute"}
+              {isStreaming ? "Processing" : "Execute Prompt"}
             </button>
           </div>
-        </div>
-      </div>
+        </footer>
+      </main>
     </div>
   );
 }
