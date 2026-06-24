@@ -31,11 +31,14 @@ function App() {
     setIsStreaming(true);
 
     try {
-      const response = await fetch("http://localhost:8000/chat/stream", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: currentMessage }),
-      });
+      const response = await fetch(
+        "https://ai-document-backend-m5lc.onrender.com/chat/stream",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: currentMessage }),
+        },
+      );
 
       const reader = response.body?.getReader();
       if (!reader) return;
